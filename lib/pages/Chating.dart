@@ -92,7 +92,7 @@ class _ChatingState extends State<Chating> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.name.isNotEmpty ? widget.name : 'Chat'),
+        title: Text(widget.name.isNotEmpty ? widget.name : 'Chat',style: TextStyle(color: Colors.black),),
         centerTitle: true,
         titleTextStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         backgroundColor: Colors.grey[100],

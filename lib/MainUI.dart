@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:myapp/addContact.dart';
 import 'package:myapp/pages/Home.dart';
 import 'package:myapp/pages/Chating.dart';
 import 'package:myapp/pages/contact.dart';
 import 'package:myapp/pages/mine.dart';
+import 'package:myapp/pages/widgets%20for%20mine/CardMine.dart';
 
 // 自定义路由过渡动画 - 左右滑动
 class SlidePageRoute extends PageRouteBuilder {
@@ -44,6 +47,7 @@ class _MainWidegetMaterialAppState extends State<MainWidegetMaterialApp> {
     HomeWidget(),
     ContactPage(),
     MinePage(),
+
   ];
 
   @override
@@ -53,6 +57,7 @@ class _MainWidegetMaterialAppState extends State<MainWidegetMaterialApp> {
       debugShowCheckedModeBanner: false,
       // 注册命名路由，构建时从路由 settings 读取传入的参数并传给 Chating
       routes: {
+        '/addContact': (context) => Addcontact(),
         '/chat': (context) {
           final args = ModalRoute.of(context)?.settings.arguments;
           final String name = args is String ? args : '';
@@ -68,36 +73,77 @@ class _MainWidegetMaterialAppState extends State<MainWidegetMaterialApp> {
         }
         return null;
       },
-      home: Builder(
-        builder: (context) => Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: Text(
-              '畅连(2)',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            centerTitle: true,
-            backgroundColor: Colors.grey[100],
-            actions: [IconButton(onPressed: () {
-                // 点击加号图标时，弹出一个简单的对话框
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('功能未实现'),
-                    content: Text('加号功能尚未实现。'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('确定'),
-                      ),
-                    ],
-                  ),
-                );
-            }, icon: Icon(Icons.add))],
-            leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu))
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(
+            '畅连(2)',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            
           ),
-          body: _pages[_currentIndex],
-          bottomNavigationBar: BottomNavigationBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          centerTitle: true,
+          backgroundColor: Colors.grey[100],
+          actions: [
+            Builder(
+              builder: (context) => IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/addContact');
+                },
+                icon: Icon(Icons.add),
+              ),
+            ),
+          ],
+          leading: Builder(
+            builder: (context) => IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(Icons.menu),
+            ),
+          )
+          
+        ),
+        
+        body: _pages[_currentIndex],
+        drawer: Drawer(
+          backgroundColor: Colors.white,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              Container(height: 200,child: Cardmine(),),
+              ListTile(
+                leading: Icon(Icons.add),
+                title: Text('添加好友'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/addContact');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('设置'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.help),
+                title: Text('帮助'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.info),
+                title: Text('关于'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: (index) {
               setState(() {
@@ -114,7 +160,6 @@ class _MainWidegetMaterialAppState extends State<MainWidegetMaterialApp> {
               BottomNavigationBarItem(icon: Icon(Icons.person), label: '我'),
             ],
           ),
-        ),
       ),
     );
   }
